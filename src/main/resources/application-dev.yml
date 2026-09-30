@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loanledger
+    username: loanledger
+    password: loanledger
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    root: info
+    com.loanledger: debug
