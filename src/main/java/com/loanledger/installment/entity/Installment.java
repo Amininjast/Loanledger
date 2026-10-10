@@ -55,7 +55,7 @@ public class Installment extends BaseEntity {
 
     public UUID getId() { return id; }
     public Loan getLoan() { return loan; }
-    public void setLoan(Loan loan) { this.loan = loan; }
+    void setLoan(Loan loan) { this.loan = loan; }
     public int getInstallmentNumber() { return installmentNumber; }
     public BigDecimal getAmount() { return amount; }
     public BigDecimal getPaidAmount() { return paidAmount; }
