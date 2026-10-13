@@ -51,5 +51,19 @@ public class AuthService {
         return AuthResponse.of(token, UserResponse.from(user));
     }
 
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByUsername(request.username())
+                .orElseThrow(() -> new BusinessException("Invalid username or password", HttpStatus.UNAUTHORIZED));
 
+        if (!user.isEnabled()) {
+            throw new BusinessException("Account is disabled", HttpStatus.FORBIDDEN);
+        }
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            throw new BusinessException("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = jwtService.generateToken(user.getId(), user.getUsername(), user.getRole().name());
+        return AuthResponse.of(token, UserResponse.from(user));
+    }
 }
