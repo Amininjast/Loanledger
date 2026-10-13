@@ -29,5 +29,27 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
+    @Transactional
+    public AuthResponse register(RegisterRequest request) {
+        if (userRepository.existsByUsername(request.username())) {
+            throw new BusinessException("Username already taken", HttpStatus.CONFLICT);
+        }
+        if (userRepository.existsByEmail(request.email())) {
+            throw new BusinessException("Email already registered", HttpStatus.CONFLICT);
+        }
+
+        User user = new User(
+                request.username(),
+                request.email(),
+                passwordEncoder.encode(request.password()),
+                request.fullName(),
+                Role.ROLE_CUSTOMER
+        );
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(user.getId(), user.getUsername(), user.getRole().name());
+        return AuthResponse.of(token, UserResponse.from(user));
+    }
+
 
 }
