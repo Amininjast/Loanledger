@@ -58,5 +58,12 @@ public class JwtService {
         return parseClaims(token).get("username", String.class);
     }
 
-
+    public boolean isValid(String token) {
+        try {
+            Claims claims = parseClaims(token);
+            return claims.getExpiration().after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
