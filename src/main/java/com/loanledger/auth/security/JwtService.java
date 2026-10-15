@@ -42,5 +42,13 @@ public class JwtService {
                 .compact();
     }
 
+    public Claims parseClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
 
 }
