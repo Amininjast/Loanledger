@@ -24,5 +24,32 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        if (header == null || !header.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String token = header.substring(7);
+        if (jwtService.isValid(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UUID userId = jwtService.extractUserId(token);
+            String username = jwtService.extractUsername(token);
+            String role = jwtService.parseClaims(token).get("role", String.class);
+
+            var auth = new UsernamePasswordAuthenticationToken(
+                    userId,
+                    null,
+                    List.of(new SimpleGrantedAuthority(role))
+            );
+            auth.setDetails(username);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
+
+        filterChain.doFilter(request, response);
+    }
 }
