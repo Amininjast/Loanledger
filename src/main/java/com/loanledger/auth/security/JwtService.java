@@ -50,5 +50,9 @@ public class JwtService {
                 .getPayload();
     }
 
+    public UUID extractUserId(String token) {
+        return UUID.fromString(parseClaims(token).getSubject());
+    }
+
 
 }
