@@ -26,5 +26,21 @@ public class LoanController {
         this.loanService = loanService;
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse<LoanResponse>> create(
+            @Valid @RequestBody CreateLoanRequest request,
+            Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        Loan loan = loanService.createLoan(
+                userId,
+                request.principalAmount(),
+                request.annualInterestRate(),
+                request.termInMonths(),
+                request.startDate()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Loan created", LoanResponse.from(loan)));
+    }
+
 
 }
