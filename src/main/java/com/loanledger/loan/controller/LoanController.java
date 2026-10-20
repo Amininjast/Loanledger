@@ -60,5 +60,13 @@ public class LoanController {
         return ResponseEntity.ok(ApiResponse.ok(LoanResponse.from(loan)));
     }
 
-
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<Page<LoanResponse>>> myLoans(
+            Authentication authentication,
+            @PageableDefault(size = 10) Pageable pageable) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        Page<LoanResponse> page = loanService.getLoansByUser(userId, pageable)
+                .map(LoanResponse::summary);
+        return ResponseEntity.ok(ApiResponse.ok(page));
+    }
 }
