@@ -42,5 +42,11 @@ public class LoanController {
                 .body(ApiResponse.ok("Loan created", LoanResponse.from(loan)));
     }
 
+    @PostMapping("/{id}/activate")
+    public ResponseEntity<ApiResponse<LoanResponse>> activate(@PathVariable UUID id) {
+        Loan loan = loanService.activateLoan(id);
+        return ResponseEntity.ok(ApiResponse.ok("Loan activated", LoanResponse.from(loan)));
+    }
+
 
 }
