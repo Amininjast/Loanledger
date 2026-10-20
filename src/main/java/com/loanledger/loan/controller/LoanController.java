@@ -48,5 +48,11 @@ public class LoanController {
         return ResponseEntity.ok(ApiResponse.ok("Loan activated", LoanResponse.from(loan)));
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<ApiResponse<LoanResponse>> cancel(@PathVariable UUID id) {
+        Loan loan = loanService.cancelLoan(id);
+        return ResponseEntity.ok(ApiResponse.ok("Loan cancelled", LoanResponse.from(loan)));
+    }
+
 
 }
