@@ -32,5 +32,16 @@ public record LoanResponse(
         );
     }
 
-
+    public static LoanResponse summary(Loan loan) {
+        return new LoanResponse(
+                loan.getId(),
+                loan.getUser().getId(),
+                loan.getPrincipalAmount(),
+                loan.getAnnualInterestRate(),
+                loan.getTermInMonths(),
+                loan.getStartDate(),
+                loan.getStatus(),
+                List.of()
+        );
+    }
 }
