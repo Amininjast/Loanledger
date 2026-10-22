@@ -18,4 +18,19 @@ public record LoanResponse(
         LocalDate startDate,
         LoanStatus status,
         List<InstallmentResponse> installments
-)
+) {
+    public static LoanResponse from(Loan loan) {
+        return new LoanResponse(
+                loan.getId(),
+                loan.getUser().getId(),
+                loan.getPrincipalAmount(),
+                loan.getAnnualInterestRate(),
+                loan.getTermInMonths(),
+                loan.getStartDate(),
+                loan.getStatus(),
+                loan.getInstallments().stream().map(InstallmentResponse::from).toList()
+        );
+    }
+
+
+}
