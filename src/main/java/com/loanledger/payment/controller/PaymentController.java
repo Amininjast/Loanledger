@@ -41,5 +41,11 @@ public class PaymentController {
                 .body(ApiResponse.ok("Payment successful", PaymentResponse.from(payment)));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PaymentResponse>> getById(@PathVariable UUID id) {
+        Payment payment = paymentService.getPayment(id);
+        return ResponseEntity.ok(ApiResponse.ok(PaymentResponse.from(payment)));
+    }
+
 
 }
