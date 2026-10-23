@@ -26,5 +26,20 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse<PaymentResponse>> pay(
+            @Valid @RequestBody PayInstallmentRequest request,
+            Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        Payment payment = paymentService.payInstallment(
+                userId,
+                request.installmentId(),
+                request.amount(),
+                request.reference()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Payment successful", PaymentResponse.from(payment)));
+    }
+
 
 }
