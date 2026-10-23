@@ -47,5 +47,13 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.ok(PaymentResponse.from(payment)));
     }
 
-
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<Page<PaymentResponse>>> myPayments(
+            Authentication authentication,
+            @PageableDefault(size = 10) Pageable pageable) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        Page<PaymentResponse> page = paymentService.getPaymentsByUser(userId, pageable)
+                .map(PaymentResponse::from);
+        return ResponseEntity.ok(ApiResponse.ok(page));
+    }
 }
