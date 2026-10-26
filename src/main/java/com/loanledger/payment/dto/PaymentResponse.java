@@ -14,4 +14,15 @@ public record PaymentResponse(
         PaymentStatus status,
         Instant paidAt,
         String reference
-)
+) {
+    public static PaymentResponse from(Payment p) {
+        return new PaymentResponse(
+                p.getId(),
+                p.getInstallment().getId(),
+                p.getAmount(),
+                p.getStatus(),
+                p.getPaidAt(),
+                p.getReference()
+        );
+    }
+}
