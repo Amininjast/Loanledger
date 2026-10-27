@@ -12,4 +12,15 @@ public record UserResponse(
         String fullName,
         Role role,
         boolean enabled
-)
+) {
+    public static UserResponse from(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getRole(),
+                user.isEnabled()
+        );
+    }
+}
